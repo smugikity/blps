@@ -1,10 +1,15 @@
 package org.football.config;
 
+import org.football.jwt.AuthEntryPointJwt;
+import org.football.jwt.AuthTokenFilter;
+import org.football.service.CustomUserDetailsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -17,12 +22,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
     @Autowired
-    UserDetailsServiceImpl userDetailsService;
+    CustomUserDetailsService userDetailsService;
 
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
@@ -61,12 +67,13 @@ public class SecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeRequests(authorize -> {
-            authorize
-                    .antMatchers("/api/auth/users").hasAuthority("ADMIN")
-                    .antMatchers("/api/auth/logout").authenticated()
-                    .antMatchers("/api/auth/**").anonymous()
-                    .antMatchers(HttpMethod.GET ,"/api/**").permitAll()
-                    .antMatchers("/api/**").hasAuthority("ADMIN")
+                    authorize
+                    .requestMatchers("/api/auth/users").hasAuthority("ADMIN")
+                    .requestMatchers("/api/auth/logout").authenticated()
+                    .requestMatchers("/api/auth/**").anonymous()
+                    .requestMatchers(HttpMethod.GET ,"/api/**").permitAll()
+                    .requestMatchers("/api/**").hasAuthority("ADMIN")
+                    .anyRequest().authenticated()
                     ;
 
         });
@@ -74,6 +81,10 @@ public class SecurityConfig {
 //                .logoutUrl("/api/auth/logout")
 //                .invalidateHttpSession(true)
 //                .deleteCookies("JSESSIONID").permitAll();
+
+        http.authenticationProvider(authenticationProvider());
+
+        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }
