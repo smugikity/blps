@@ -1,6 +1,8 @@
 package org.football.controller;
 
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletResponse;
 import org.football.model.Bet;
 import org.football.model.Role;
 import org.football.model.User;
@@ -9,17 +11,21 @@ import org.football.dto.RegisterDto;
 import org.football.repository.RoleRepository;
 import org.football.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.query.JSqlParserUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextHolderStrategy;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import java.util.Collections;
 import java.util.List;
 
@@ -39,12 +45,25 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @PostMapping("/login")
-    public ResponseEntity<String> authenticateUser(@RequestBody LoginDto loginDto){
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                loginDto.getUsername(), loginDto.getPassword()));
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+    SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
+
+
+    @PostMapping("/login")
+    public ResponseEntity<String> authenticateUser(@RequestBody LoginDto loginDto, HttpServletRequest request, HttpServletResponse response){
+
+        try {
+            request.login(loginDto.getUsername(), loginDto.getPassword());
+        } catch (ServletException e) {
+            System.out.println("Invalid username or password");
+        }
+
+//        sernamePasswordAuthenticationToken token = UsernamePasswordAuthenticationToken.unauthenticated(
+//                loginDto.getUsername(), loginDto.getPassword());
+//        Authentication authentication = authenticationManager.authenticate(token);
+//        System.out.println(authentication.getName());
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
+//        System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
         return new ResponseEntity<>("User signed-in successfully!.", HttpStatus.OK);
     }
 
@@ -78,14 +97,15 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<String> logoutUser(HttpServletRequest request) {
-        // Invalidate the session
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();
-        }
-        // Clear authentication details
-        SecurityContextHolder.clearContext();
+    public ResponseEntity<String> logoutUser(Authentication authentication, HttpServletRequest request, HttpServletResponse response) {
+//         Invalidate the session
+//        HttpSession session = request.getSession(false);
+//        if (session != null) {
+//            session.invalidate();
+//        }
+//        // Clear authentication details
+//        SecurityContextHolder.clearContext();
+        this.logoutHandler.logout(request, response, authentication);
         return new ResponseEntity<>("User logged out successfully.", HttpStatus.OK);
     }
 
