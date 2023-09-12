@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.jaas.JaasAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,9 +35,6 @@ import java.util.List;
 public class AuthController {
 
     @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -50,20 +48,16 @@ public class AuthController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<String> authenticateUser(@RequestBody LoginDto loginDto, HttpServletRequest request, HttpServletResponse response){
-
-        try {
-            request.login(loginDto.getUsername(), loginDto.getPassword());
-        } catch (ServletException e) {
-            System.out.println("Invalid username or password");
-        }
-
-//        sernamePasswordAuthenticationToken token = UsernamePasswordAuthenticationToken.unauthenticated(
-//                loginDto.getUsername(), loginDto.getPassword());
-//        Authentication authentication = authenticationManager.authenticate(token);
-//        System.out.println(authentication.getName());
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//        System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
+    public ResponseEntity<String> authenticateUser(@RequestBody LoginDto loginDto){
+//        val authentication: Authentication = authenticationManager.authenticate(
+//                UsernamePasswordAuthenticationToken(loginDto.username, loginDto.password)
+//        )
+//        SecurityContextHolder.getContext().authentication = authentication
+//        try {
+//            request.login(loginDto.getUsername(), loginDto.getPassword());
+//        } catch (ServletException e) {
+//            System.out.println("Invalid username or password");
+//        }
         return new ResponseEntity<>("User signed-in successfully!.", HttpStatus.OK);
     }
 

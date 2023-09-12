@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,7 +35,8 @@ public class TeamController {
 
     // create team rest api
     @PostMapping("/teams")
-    public Team createteam(@RequestBody Team team) {
+    public Team createteam(@RequestBody Team team, Authentication authentication) {
+        System.out.println(authentication.isAuthenticated());
         return teamRepository.save(team);
     }
 
