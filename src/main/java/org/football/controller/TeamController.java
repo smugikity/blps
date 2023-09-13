@@ -1,11 +1,16 @@
 package org.football.controller;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.football.jaas.CustomJaasPrincipal;
+import org.football.model.XmlUserWrapper;
+import org.football.repository.XmlUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.jaas.JaasAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +28,8 @@ import org.football.repository.TeamRepository;
 @RestController
 @RequestMapping("/api/")
 public class TeamController {
+    @Autowired
+    private XmlUserRepository xmlUserRepository;
 
     @Autowired
     private TeamRepository teamRepository;
@@ -35,8 +42,7 @@ public class TeamController {
 
     // create team rest api
     @PostMapping("/teams")
-    public Team createteam(@RequestBody Team team, Authentication authentication) {
-        System.out.println(authentication.isAuthenticated());
+    public Team createteam(@RequestBody Team team) {
         return teamRepository.save(team);
     }
 
@@ -74,4 +80,14 @@ public class TeamController {
         response.put("deleted", Boolean.TRUE);
         return ResponseEntity.ok(response);
     }
+
+    private CustomJaasPrincipal getCustomPrincipal(Authentication authentication) throws ClassCastException {
+        if (authentication instanceof JaasAuthenticationToken jaasAuthentication) {
+            Principal principal = jaasAuthentication.getLoginContext().getSubject().getPrincipals().iterator().next();
+            if (principal instanceof CustomJaasPrincipal customPrincipal) {
+                return customPrincipal;
+            } else throw new ClassCastException("Wrong principal class");
+        } else throw new ClassCastException("Wrong authentication class");
+    }
 }
+

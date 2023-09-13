@@ -2,11 +2,11 @@ package org.football.jaas;
 
 import java.security.Principal;
 
-public class CustomPrincipal implements Principal {
+public class CustomJaasPrincipal implements Principal {
     private String username;
     private Long id;
 
-    public CustomPrincipal(Long id,String username) {
+    public CustomJaasPrincipal(Long id, String username) {
         this.id = id;
         this.username = username;
     }

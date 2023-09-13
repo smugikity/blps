@@ -43,19 +43,19 @@ public class BetController {
     // create team rest api
     @PostMapping("/bets")
     public ResponseEntity<String> createBet(@RequestBody BetDto betDto) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        System.out.println(username);
-        User user = userRepository.findByEmail(username).orElseThrow(() -> new ResourceNotFoundException("user not exist with username"));
-        Bet bet = new Bet();
-        bet.setUser(user);
-        bet.setPoint(betDto.getPoint());
-        bet.setMatch(matchRepository.findById(betDto.getMatch()).orElseThrow(() -> new ResourceNotFoundException("match not exist with id")));
-        bet.setTeam(teamRepository.findById(betDto.getTeam()).orElseThrow(() -> new ResourceNotFoundException("team not exist with id")));
-        if (user.getPoint()>=bet.getPoint()) {
-            user.setPoint(user.getPoint() - bet.getPoint());
-            betRepository.save(bet);
-            return new ResponseEntity<>("Placed bet", HttpStatus.OK);
-        }
+//        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+//        System.out.println(username);
+//        User user = userRepository.findByEmail(username).orElseThrow(() -> new ResourceNotFoundException("user not exist with username"));
+//        Bet bet = new Bet();
+//        bet.setUser(user);
+//        bet.setPoint(betDto.getPoint());
+//        bet.setMatch(matchRepository.findById(betDto.getMatch()).orElseThrow(() -> new ResourceNotFoundException("match not exist with id")));
+//        bet.setTeam(teamRepository.findById(betDto.getTeam()).orElseThrow(() -> new ResourceNotFoundException("team not exist with id")));
+//        if (user.getPoint()>=bet.getPoint()) {
+//            user.setPoint(user.getPoint() - bet.getPoint());
+//            betRepository.save(bet);
+//            return new ResponseEntity<>("Placed bet", HttpStatus.OK);
+//        }
         return new ResponseEntity<>("Not enough points", HttpStatus.BAD_REQUEST);
     }
 
