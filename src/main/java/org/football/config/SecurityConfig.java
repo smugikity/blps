@@ -45,11 +45,11 @@ public class SecurityConfig {
         .authorizeRequests(authorize -> {
             try {
                 authorize
-                    .requestMatchers("/api/auth/users").hasAuthority("ADMIN")
-                    .requestMatchers("/api/auth/logout").not().anonymous()
-                    .requestMatchers("/api/auth/**").not().authenticated()
-                    .requestMatchers(HttpMethod.GET ,"/api/**").authenticated()
-                       .requestMatchers("/api/**").hasAuthority("ADMIN")
+                    .antMatchers("/api/auth/users").hasAuthority("ADMIN")
+                    .antMatchers("/api/auth/logout").not().anonymous()
+                    .antMatchers("/api/auth/**").not().authenticated()
+                    .antMatchers(HttpMethod.GET ,"/api/**").permitAll()
+                    .antMatchers("/api/**").hasAuthority("ADMIN")
                     .and().httpBasic(Customizer.withDefaults());
             } catch (Exception e) {
                 e.printStackTrace();

@@ -9,6 +9,7 @@ INSERT INTO teams(city,name,stadium) VALUES
     ('Madrid','Real Madrid','Santiago Bernabeu'),
     ('Munich','Bayern Munich','Allianz Arena');
 INSERT INTO matches(name,team1_id,team2_id,team1_score,team2_score) VALUES
+    ('Friendly match 2023',1,2,0,0),
     ('2012 UCL final',2,6,0,0),
     ('2023 EPL matchday 10',2,3,0,0),
     ('2023 UEL semi-final 1',1,4,0,0),

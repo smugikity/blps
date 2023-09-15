@@ -22,4 +22,11 @@
             <role>USER</role>
         </roles>
     </user>
+    <user id="4">
+        <username>amogus2</username>
+        <password>amogus2</password>
+        <roles>
+            <role>USER</role>
+        </roles>
+    </user>
 </users>

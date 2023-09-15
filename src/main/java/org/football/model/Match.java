@@ -6,7 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.lang.Nullable;
 
-import jakarta.persistence.*;
+
+import javax.persistence.*;
 import java.util.Set;
 
 @Getter

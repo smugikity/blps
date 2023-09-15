@@ -6,6 +6,7 @@ import org.football.dto.RegisterDto;
 import org.football.model.XmlUser;
 import org.football.repository.UserRepository;
 import org.football.repository.XmlUserRepository;
+import org.football.service.imp.UserServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,13 +23,13 @@ public class AuthController {
     private XmlUserRepository xmlUserRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserServiceImp userServiceImp;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
 
+//    SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
 //    @PostMapping("/login")
 //    public ResponseEntity<String> authenticateUser(@RequestBody LoginDto loginDto){
 //        val authentication: Authentication = authenticationManager.authenticate(
@@ -44,18 +45,14 @@ public class AuthController {
 //    }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody RegisterDto registerDto){
-
-        // add check for username exists in a DB
-        if(xmlUserRepository.existsByUsername(registerDto.getUsername())){
-            return new ResponseEntity<>("Username is already taken!", HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> registerUser(@RequestBody RegisterDto registerDto) {
+        try {
+            User user = userServiceImp.create(registerDto.getUsername(),registerDto.getPassword());
+            return new ResponseEntity<>("User registered successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
-        // create user object
-        XmlUser xmlUser = xmlUserRepository.create(registerDto.getUsername(),registerDto.getPassword());
-        User user = new User(xmlUser.getId());
-        userRepository.save(user);
-        return new ResponseEntity<>("User registered successfully", HttpStatus.OK);
     }
 
 //    @PostMapping("/logout")
@@ -73,6 +70,6 @@ public class AuthController {
 
     @GetMapping("/users")
     public List<User> getAllUsers(){
-        return userRepository.findAll();
+        return userServiceImp.findAll();
     }
 }

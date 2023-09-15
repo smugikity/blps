@@ -5,7 +5,6 @@ import org.football.model.User;
 import org.football.model.XmlUser;
 import org.football.repository.UserRepository;
 import org.football.repository.XmlUserRepository;
-import org.hibernate.annotations.DialectOverride;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.jaas.AuthorityGranter;
 import org.springframework.stereotype.Component;

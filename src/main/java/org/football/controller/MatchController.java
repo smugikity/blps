@@ -2,15 +2,13 @@ package org.football.controller;
 
 import org.football.exception.ResourceNotFoundException;
 import org.football.model.Match;
-import org.football.model.Bet;
 import org.football.dto.MatchDto;
 import org.football.dto.MatchScoreDto;
-import org.football.model.Team;
 import org.football.repository.BetRepository;
 import org.football.repository.TeamRepository;
 import org.football.repository.MatchRepository;
 import org.football.repository.UserRepository;
-import org.football.service.MatchService;
+import org.football.service.imp.MatchServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,61 +23,57 @@ import java.util.Map;
 public class MatchController {
 
     @Autowired
-    private MatchRepository matchRepository;
-
-    @Autowired
-    private TeamRepository teamRepository;
-
-    @Autowired
-    private BetRepository betRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private MatchService matchService;
+    private MatchServiceImp matchService;
 
     // get all teams
     @GetMapping("/matches")
     public List<Match> getAllMatches(){
-        return matchRepository.findAll();
+        return matchService.findAll();
     }
 
     // create team rest api
     @PostMapping("/matches")
-    public ResponseEntity<Match> createMatch(@RequestBody MatchDto matchDto) {
-        Match match = new Match();
-        match.setName(matchDto.getName());
-        match.setTeam1(teamRepository.findById(matchDto.getTeam1()).orElseThrow(() -> new ResourceNotFoundException("team not exist with id")));
-        match.setTeam2(teamRepository.findById(matchDto.getTeam2()).orElseThrow(() -> new ResourceNotFoundException("team not exist with id")));
-        matchRepository.save(match);
-        return ResponseEntity.ok(match);
+    public ResponseEntity<?> createMatch(@RequestBody MatchDto matchDto) {
+        try {
+            Match match = matchService.create(matchDto.getName(),matchDto.getTeam1(),matchDto.getTeam2());
+            return ResponseEntity.ok(match);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     // get team by id rest api
     @GetMapping("/matches/{id}")
-    public ResponseEntity<Match> getMatchById(@PathVariable Long id) {
-        Match match = matchRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("match not exist with id :" + id));
-        return ResponseEntity.ok(match);
+    public ResponseEntity<?> getMatchById(@PathVariable Long id) {
+        try {
+            Match match = matchService.findById(id);
+            return ResponseEntity.ok(match);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     // update team rest api
 
     @PatchMapping("/matches/{id}")
-    public ResponseEntity<Match> updateMatch(@PathVariable Long id, @RequestBody MatchScoreDto matchScoreDto){
-        return ResponseEntity.ok(matchService.updateScore(id, matchScoreDto.getTeam1_score(), matchScoreDto.getTeam2_score()));
+    public ResponseEntity<?> updateMatch(@PathVariable Long id, @RequestBody MatchScoreDto matchScoreDto){
+        try {
+            Match match = matchService.updateScore(id, matchScoreDto.getTeam1_score(), matchScoreDto.getTeam2_score());
+            return ResponseEntity.ok(match);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     // delete team rest api
     @DeleteMapping("/matches/{id}")
-    public ResponseEntity<Map<String, Boolean>> deleteMatch(@PathVariable Long id){
-        Match match = matchRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("match not exist with id :" + id));
-
-        matchRepository.delete(match);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<?> deleteMatch(@PathVariable Long id){
+        try {
+            matchService.delete(id);
+            return ResponseEntity.ok("Match deleted");
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

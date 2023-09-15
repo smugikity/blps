@@ -1,7 +1,7 @@
 package org.football.repository;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import org.football.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -61,6 +61,16 @@ public class XmlUserRepository {
         }
         return false;
     }
+
+    public XmlUser findByUsername(String username) {
+        for (XmlUser user : userList) {
+            if (user.getUsername().equals(username)) {
+                return user;
+            }
+        }
+        return null;
+    }
+
     public List<XmlUser> findAll() {
         return userList;
     }
