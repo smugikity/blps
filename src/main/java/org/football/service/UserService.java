@@ -11,6 +11,8 @@ public interface UserService {
 
     XmlUser findByUsername(String username) throws Exception;
 
+    Integer getPointByUsername(String username) throws Exception;
+
     User findById(Long id) throws Exception;
 
     User save(User user) throws Exception;

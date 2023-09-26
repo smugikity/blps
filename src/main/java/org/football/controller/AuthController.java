@@ -10,6 +10,7 @@ import org.football.service.imp.UserServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
@@ -53,6 +54,16 @@ public class AuthController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
+    }
+
+    @GetMapping("/point")
+    public ResponseEntity<?> getPoint(Authentication authentication) {
+        try {
+            Integer point = userServiceImp.getPointByUsername(authentication.getPrincipal().toString());
+            return ResponseEntity.ok("Your points: "+point);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
 //    @PostMapping("/logout")

@@ -1,30 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <users>
     <user id="1">
+        <username>admin</username>
+        <password>admin</password>
+        <roles>
+            <role>ADMIN</role>
+            <role>USER</role>
+        </roles>
+    </user>
+    <user id="2">
         <username>user</username>
         <password>user</password>
         <roles>
             <role>USER</role>
         </roles>
     </user>
-    <user id="2">
-        <username>admin</username>
-        <password>admin</password>
-        <roles>
-            <role>USER</role>
-            <role>ADMIN</role>
-        </roles>
-    </user>
     <user id="3">
-        <username>amogus</username>
-        <password>amogus</password>
-        <roles>
-            <role>USER</role>
-        </roles>
-    </user>
-    <user id="4">
-        <username>amogus2</username>
-        <password>amogus2</password>
+        <username>amogus4</username>
+        <password>amogus3</password>
         <roles>
             <role>USER</role>
         </roles>

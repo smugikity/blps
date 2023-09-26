@@ -47,6 +47,7 @@ public class SecurityConfig {
                 authorize
                     .antMatchers("/api/auth/users").hasAuthority("ADMIN")
                     .antMatchers("/api/auth/logout").not().anonymous()
+                    .antMatchers("/api/auth/point").not().anonymous()
                     .antMatchers("/api/auth/**").not().authenticated()
                     .antMatchers(HttpMethod.GET ,"/api/**").permitAll()
                     .antMatchers("/api/**").hasAuthority("ADMIN")

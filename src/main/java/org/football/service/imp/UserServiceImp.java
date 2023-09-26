@@ -45,6 +45,14 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    public Integer getPointByUsername(String username) throws Exception {
+        XmlUser xmlUser = xmlUserRepository.findByUsername(username);
+        if (xmlUser==null) throw new Exception("User not found in file");
+        User user = userRepository.findById(xmlUser.getId()).orElseThrow(()->new Exception("User not found in database"));
+        return user.getPoint();
+    }
+
+    @Override
     public User findById(Long id) throws Exception {
         return userRepository.findById(id).orElseThrow(()->new Exception("User not found in database"));
     }
