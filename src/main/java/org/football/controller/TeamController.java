@@ -2,7 +2,6 @@ package org.football.controller;
 
 import org.football.dto.TeamDto;
 import org.football.model.Team;
-import org.football.repository.XmlUserRepository;
 import org.football.service.imp.TeamServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,8 +15,6 @@ import java.util.List;
 public class TeamController {
     @Autowired
     private TeamServiceImp teamServiceImp;
-    @Autowired
-    private XmlUserRepository xmlUserRepository;
 
     // get all teams
     @GetMapping("/teams")

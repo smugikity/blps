@@ -3,7 +3,6 @@ package org.football.controller;
 
 import org.football.dto.RegisterDto;
 import org.football.model.User;
-import org.football.repository.XmlUserRepository;
 import org.football.service.imp.UserServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,9 +16,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-    @Autowired
-    private XmlUserRepository xmlUserRepository;
-
     @Autowired
     private UserServiceImp userServiceImp;
 

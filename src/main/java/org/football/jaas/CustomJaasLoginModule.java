@@ -1,13 +1,17 @@
 package org.football.jaas;
 
-import org.football.model.XmlUser;
-import org.football.repository.XmlUserRepository;
+import org.football.model.User;
+import org.football.service.UserService;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import javax.security.auth.Subject;
-import javax.security.auth.callback.*;
+import javax.security.auth.callback.Callback;
+import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.callback.NameCallback;
+import javax.security.auth.callback.PasswordCallback;
 import javax.security.auth.login.LoginException;
 import javax.security.auth.spi.LoginModule;
-import java.io.IOException;
 import java.util.Map;
 
 
@@ -39,16 +43,18 @@ public class CustomJaasLoginModule implements LoginModule {
             callbackHandler.handle(callbacks);
             String enteredUsername = ((NameCallback) callbacks[0]).getName();
             String enteredPassword = String.valueOf(((PasswordCallback) callbacks[1]).getPassword());
-            XmlUser xmlUser = XmlUserRepository.findByUsernameAndPassword(enteredUsername, enteredPassword);
-            if (xmlUser != null) {
+            ApplicationContext context = new AnnotationConfigApplicationContext(UserService.class);
+            UserService userService = context.getBean(UserService.class);
+            User user = userService.findByUsernameAndPassword(enteredUsername, enteredPassword);
+            if (user != null) {
                 username = enteredUsername;
                 isAuthenticated = true;
-                subject.getPrincipals().add(new CustomJaasPrincipal(xmlUser.getId(), username));
+                subject.getPrincipals().add(new CustomJaasPrincipal(user.getId(), username));
                 return true;
             } else {
                 throw new LoginException("Authentication failed");
             }
-        } catch (IOException | UnsupportedCallbackException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new LoginException("Error during authentication: " + e.getMessage());
         }

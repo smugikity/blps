@@ -1,6 +1,6 @@
--- INSERT INTO roles(name) VALUES
---     ('ADMIN'),
---     ('USER');
+INSERT INTO roles(name)
+VALUES ('ADMIN'),
+       ('USER');
 INSERT INTO teams(city, name, stadium)
 VALUES ('Milan', 'Inter Milan', 'San Siro'),
        ('London', 'Chelsea', 'Stamford Bridge'),

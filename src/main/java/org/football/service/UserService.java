@@ -1,7 +1,6 @@
 package org.football.service;
 
 import org.football.model.User;
-import org.football.model.XmlUser;
 
 import java.util.List;
 
@@ -10,7 +9,9 @@ public interface UserService {
 
     List<User> findAll();
 
-    XmlUser findByUsername(String username) throws Exception;
+    User findByUsername(String username) throws Exception;
+
+    User findByUsernameAndPassword(String username, String password) throws Exception;
 
     Integer getPointByUsername(String username) throws Exception;
 

@@ -17,10 +17,6 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
-    //    @Autowired
-//    XmlUserRepository xmlUserRepository;
-//    @Autowired
-//    UserRepository userRepository;
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

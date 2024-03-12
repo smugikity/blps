@@ -1,7 +1,10 @@
 package org.football.service.imp;
 
 import org.football.exception.ResourceNotFoundException;
-import org.football.model.*;
+import org.football.model.Bet;
+import org.football.model.Match;
+import org.football.model.Team;
+import org.football.model.User;
 import org.football.repository.BetRepository;
 import org.football.service.BetService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,9 +48,7 @@ public class BetServiceImp implements BetService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Bet createBet(String username, Integer point, Long matchId, Long teamId) throws Exception {
-        XmlUser xmlUser = userServiceImp.findByUsername(username);
-        Long userId = xmlUser.getId();
-        User user = userServiceImp.findById(userId);
+        User user = userServiceImp.findByUsername(username);
         Match match = matchServiceImp.findById(matchId);
         Team team = teamServiceImp.findById(teamId);
         if (point > user.getPoint()) throw new Exception("Not enough points");
