@@ -4,7 +4,6 @@ import org.football.exception.ResourceNotFoundException;
 import org.football.model.*;
 import org.football.repository.BetRepository;
 import org.football.service.BetService;
-import org.football.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,8 +27,8 @@ public class BetServiceImp implements BetService {
     }
 
     @Override
-    public Bet findById(Long id) throws Exception{
-        return betRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Bet not found"));
+    public Bet findById(Long id) throws Exception {
+        return betRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Bet not found"));
 
     }
 
@@ -40,7 +39,7 @@ public class BetServiceImp implements BetService {
 
     @Override
     public List<Bet> findBetsByMatchAndTeam(Match match, Team team) {
-        return betRepository.findBetsByMatchAndTeam(match,team);
+        return betRepository.findBetsByMatchAndTeam(match, team);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -51,9 +50,10 @@ public class BetServiceImp implements BetService {
         User user = userServiceImp.findById(userId);
         Match match = matchServiceImp.findById(matchId);
         Team team = teamServiceImp.findById(teamId);
-        if (point>user.getPoint()) throw new Exception("Not enough points");
-        if (!(team.equals(match.getTeam1())||team.equals(match.getTeam2()))) throw new Exception("Chosen team is invalid");
-        user.setPoint(user.getPoint()-point);
+        if (point > user.getPoint()) throw new Exception("Not enough points");
+        if (!(team.equals(match.getTeam1()) || team.equals(match.getTeam2())))
+            throw new Exception("Chosen team is invalid");
+        user.setPoint(user.getPoint() - point);
         user = userServiceImp.save(user);
         Bet bet = new Bet();
         bet.setUser(user);

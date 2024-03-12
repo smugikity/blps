@@ -1,7 +1,6 @@
 package org.football.service.imp;
 
 import org.football.exception.ResourceNotFoundException;
-import org.football.model.Match;
 import org.football.model.Team;
 import org.football.repository.TeamRepository;
 import org.football.service.TeamService;
@@ -19,7 +18,7 @@ public class TeamServiceImp implements TeamService {
 
     @Override
     public Team findById(Long id) throws Exception {
-        return teamRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Team not found"));
+        return teamRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Team not found"));
     }
 
     @Override

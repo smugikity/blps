@@ -1,10 +1,8 @@
 package org.football.controller;
 
 
-import org.football.model.User;
 import org.football.dto.RegisterDto;
-import org.football.model.XmlUser;
-import org.football.repository.UserRepository;
+import org.football.model.User;
 import org.football.repository.XmlUserRepository;
 import org.football.service.imp.UserServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -48,7 +45,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody RegisterDto registerDto) {
         try {
-            User user = userServiceImp.create(registerDto.getUsername(),registerDto.getPassword());
+            User user = userServiceImp.create(registerDto.getUsername(), registerDto.getPassword());
             return new ResponseEntity<>("User registered successfully", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -60,7 +57,7 @@ public class AuthController {
     public ResponseEntity<?> getPoint(Authentication authentication) {
         try {
             Integer point = userServiceImp.getPointByUsername(authentication.getPrincipal().toString());
-            return ResponseEntity.ok("Your points: "+point);
+            return ResponseEntity.ok("Your points: " + point);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -80,7 +77,7 @@ public class AuthController {
 //    }
 
     @GetMapping("/users")
-    public List<User> getAllUsers(){
+    public List<User> getAllUsers() {
         return userServiceImp.findAll();
     }
 }

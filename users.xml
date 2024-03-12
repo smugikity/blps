@@ -4,8 +4,8 @@
         <username>admin</username>
         <password>admin</password>
         <roles>
-            <role>ADMIN</role>
             <role>USER</role>
+            <role>ADMIN</role>
         </roles>
     </user>
     <user id="2">

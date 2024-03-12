@@ -6,8 +6,6 @@ import org.football.repository.UserRepository;
 import org.football.repository.XmlUserRepository;
 import org.football.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,10 +21,10 @@ public class UserServiceImp implements UserService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public User create(String username, String password) throws Exception {
-        if(xmlUserRepository.existsByUsername(username))
-        throw new Exception("Username is already taken!");
+        if (xmlUserRepository.existsByUsername(username))
+            throw new Exception("Username is already taken!");
 
-        XmlUser xmlUser = xmlUserRepository.create(username,password);
+        XmlUser xmlUser = xmlUserRepository.create(username, password);
         User user = new User(xmlUser.getId());
         user = userRepository.save(user);
         return user;
@@ -40,21 +38,21 @@ public class UserServiceImp implements UserService {
     @Override
     public XmlUser findByUsername(String username) throws Exception {
         XmlUser user = xmlUserRepository.findByUsername(username);
-        if (user==null) throw new Exception("User not found in file");
+        if (user == null) throw new Exception("User not found in file");
         return user;
     }
 
     @Override
     public Integer getPointByUsername(String username) throws Exception {
         XmlUser xmlUser = xmlUserRepository.findByUsername(username);
-        if (xmlUser==null) throw new Exception("User not found in file");
-        User user = userRepository.findById(xmlUser.getId()).orElseThrow(()->new Exception("User not found in database"));
+        if (xmlUser == null) throw new Exception("User not found in file");
+        User user = userRepository.findById(xmlUser.getId()).orElseThrow(() -> new Exception("User not found in database"));
         return user.getPoint();
     }
 
     @Override
     public User findById(Long id) throws Exception {
-        return userRepository.findById(id).orElseThrow(()->new Exception("User not found in database"));
+        return userRepository.findById(id).orElseThrow(() -> new Exception("User not found in database"));
     }
 
     @Override

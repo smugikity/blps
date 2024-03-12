@@ -1,20 +1,18 @@
 package org.football.config;
 
-import com.atomikos.icatch.jta.UserTransactionManager;
 import com.atomikos.icatch.jta.UserTransactionImp;
+import com.atomikos.icatch.jta.UserTransactionManager;
 import com.atomikos.jdbc.AtomikosDataSourceBean;
+import org.postgresql.xa.PGXADataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.jta.JtaTransactionManager;
-import org.postgresql.xa.PGXADataSource;
 
-import javax.transaction.SystemException;
 import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
-import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
@@ -39,12 +37,11 @@ public class TransactionManagerConfig {
     }
 
     @Bean(name = "userTransaction")
-    public UserTransaction myTransactionImp() throws Throwable{
+    public UserTransaction myTransactionImp() throws Throwable {
         UserTransactionImp userTransactionImp = new UserTransactionImp();
         userTransactionImp.setTransactionTimeout(10000);
         return userTransactionImp;
     }
-
 
 
     @Bean(name = "atomikosTransactionManager", initMethod = "init", destroyMethod = "close")
@@ -55,7 +52,7 @@ public class TransactionManagerConfig {
     }
 
     @Bean
-    @DependsOn({ "userTransaction", "atomikosTransactionManager" })
+    @DependsOn({"userTransaction", "atomikosTransactionManager"})
     public JtaTransactionManager transactionManager() throws Throwable {
         return new JtaTransactionManager(myTransactionImp(), userTransactionManager());
     }

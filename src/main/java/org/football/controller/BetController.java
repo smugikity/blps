@@ -1,27 +1,15 @@
 package org.football.controller;
 
-import org.football.exception.ResourceNotFoundException;
-import org.football.jaas.CustomJaasPrincipal;
-import org.football.model.Bet;
-import org.football.model.Team;
-import org.football.model.User;
 import org.football.dto.BetDto;
-import org.football.repository.MatchRepository;
-import org.football.repository.TeamRepository;
-import org.football.repository.BetRepository;
-import org.football.repository.UserRepository;
-import org.football.service.BetService;
+import org.football.model.Bet;
 import org.football.service.imp.BetServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/")
@@ -31,7 +19,7 @@ public class BetController {
 
     // get all teams
     @GetMapping("/bets")
-    public List<Bet> getAllBets(){
+    public List<Bet> getAllBets() {
         return betServiceImp.findAll();
     }
 
@@ -39,7 +27,7 @@ public class BetController {
     @PostMapping("/bets")
     public ResponseEntity<?> createBet(@RequestBody BetDto betDto, Authentication authentication) {
         try {
-            Bet bet = betServiceImp.createBet(authentication.getPrincipal().toString(),betDto.getPoint(),betDto.getMatch(),betDto.getTeam());
+            Bet bet = betServiceImp.createBet(authentication.getPrincipal().toString(), betDto.getPoint(), betDto.getMatch(), betDto.getTeam());
             return ResponseEntity.ok(bet);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -49,9 +37,9 @@ public class BetController {
     // get bet by id rest api
     @GetMapping("/bets/{id}")
     public ResponseEntity<?> getBetById(@PathVariable Long id) {
-        try{
-        Bet bet = betServiceImp.findById(id);
-        return ResponseEntity.ok(bet);
+        try {
+            Bet bet = betServiceImp.findById(id);
+            return ResponseEntity.ok(bet);
         } catch (Exception e) {
             return new ResponseEntity<>("Bet not found", HttpStatus.BAD_REQUEST);
         }

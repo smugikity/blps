@@ -15,6 +15,7 @@ public class CustomJaasPrincipal implements Principal {
     public String getName() {
         return username;
     }
+
     public Long getId() {
         return id;
     }

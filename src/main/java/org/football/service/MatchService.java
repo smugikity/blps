@@ -1,7 +1,6 @@
 package org.football.service;
 
 import org.football.model.Match;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ public interface MatchService {
 
     List<Match> findAll();
 
-    Match create(String name,Long team1, Long team2) throws Exception;
+    Match create(String name, Long team1, Long team2) throws Exception;
 
     void delete(Long id) throws Exception;
 }

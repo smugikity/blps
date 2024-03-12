@@ -1,6 +1,6 @@
 package org.football.model;
 
-public enum  ERole {
+public enum ERole {
     ADMIN("ADMIN"),
     MODERATOR("MODERATOR"),
     USER("USER");

@@ -1,7 +1,6 @@
 package org.football.config;
 
-import org.football.jaas.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.football.jaas.CustomJaasAuthorityGranter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -18,7 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
-//    @Autowired
+    //    @Autowired
 //    XmlUserRepository xmlUserRepository;
 //    @Autowired
 //    UserRepository userRepository;
@@ -32,7 +31,7 @@ public class SecurityConfig {
         JaasAuthenticationProvider provider = new JaasAuthenticationProvider();
         provider.setLoginConfig(new ClassPathResource("jaas.config"));
         provider.setLoginContextName("customjaasmodule");
-        JaasAuthenticationCallbackHandler[] c = {new JaasNameCallbackHandler(),new JaasPasswordCallbackHandler()};
+        JaasAuthenticationCallbackHandler[] c = {new JaasNameCallbackHandler(), new JaasPasswordCallbackHandler()};
         provider.setCallbackHandlers(c);
         AuthorityGranter[] a = {new CustomJaasAuthorityGranter()};
         provider.setAuthorityGranters(a);
@@ -42,20 +41,20 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-        .authorizeRequests(authorize -> {
-            try {
-                authorize
-                    .antMatchers("/api/auth/users").hasAuthority("ADMIN")
-                    .antMatchers("/api/auth/logout").not().anonymous()
-                    .antMatchers("/api/auth/point").not().anonymous()
-                    .antMatchers("/api/auth/**").not().authenticated()
-                    .antMatchers(HttpMethod.GET ,"/api/**").permitAll()
-                    .antMatchers("/api/**").hasAuthority("ADMIN")
-                    .and().httpBasic(Customizer.withDefaults());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+                .authorizeRequests(authorize -> {
+                    try {
+                        authorize
+                                .antMatchers("/api/auth/users").hasAuthority("ADMIN")
+                                .antMatchers("/api/auth/logout").not().anonymous()
+                                .antMatchers("/api/auth/point").not().anonymous()
+                                .antMatchers("/api/auth/**").not().authenticated()
+                                .antMatchers(HttpMethod.GET, "/api/**").permitAll()
+                                .antMatchers("/api/**").hasAuthority("ADMIN")
+                                .and().httpBasic(Customizer.withDefaults());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
         return http.build();
     }
 

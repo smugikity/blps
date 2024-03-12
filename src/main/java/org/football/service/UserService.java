@@ -6,7 +6,8 @@ import org.football.model.XmlUser;
 import java.util.List;
 
 public interface UserService {
-    User create(String username,String password) throws Exception;
+    User create(String username, String password) throws Exception;
+
     List<User> findAll();
 
     XmlUser findByUsername(String username) throws Exception;

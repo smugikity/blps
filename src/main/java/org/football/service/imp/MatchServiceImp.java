@@ -30,22 +30,22 @@ public class MatchServiceImp implements MatchService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public Match updateScore(long id, byte team1_score, byte team2_score) throws Exception{
+    public Match updateScore(long id, byte team1_score, byte team2_score) throws Exception {
         Match match = matchRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("match not exist with id :" + id));
 
         match.setTeam1_score(team1_score);
         match.setTeam2_score(team2_score);
 
-        if (match.getTeam1_score()==match.getTeam2_score()) {
-            betRepository.findBetsByMatch(match).forEach(bet->{
-                bet.getUser().setPoint(bet.getUser().getPoint()+bet.getPoint());
+        if (match.getTeam1_score() == match.getTeam2_score()) {
+            betRepository.findBetsByMatch(match).forEach(bet -> {
+                bet.getUser().setPoint(bet.getUser().getPoint() + bet.getPoint());
                 userRepository.save(bet.getUser());
             });
         } else {
-            Team winningTeam = match.getTeam1_score()>match.getTeam2_score()?match.getTeam1():match.getTeam2();
-            betRepository.findBetsByMatchAndTeam(match,winningTeam).forEach(bet->{
-                bet.getUser().setPoint(bet.getUser().getPoint()+bet.getPoint()*2);
+            Team winningTeam = match.getTeam1_score() > match.getTeam2_score() ? match.getTeam1() : match.getTeam2();
+            betRepository.findBetsByMatchAndTeam(match, winningTeam).forEach(bet -> {
+                bet.getUser().setPoint(bet.getUser().getPoint() + bet.getPoint() * 2);
                 userRepository.save(bet.getUser());
             });
         }
@@ -54,7 +54,7 @@ public class MatchServiceImp implements MatchService {
 
     @Override
     public Match findById(Long id) throws Exception {
-        return matchRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Match not found"));
+        return matchRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Match not found"));
     }
 
     @Override
@@ -64,7 +64,7 @@ public class MatchServiceImp implements MatchService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public Match create(String name, Long team1, Long team2) throws Exception{
+    public Match create(String name, Long team1, Long team2) throws Exception {
         Match match = new Match();
         match.setName(name);
         match.setTeam1(teamRepository.findById(team1).orElseThrow(() -> new ResourceNotFoundException("team not exist with id")));
@@ -75,7 +75,7 @@ public class MatchServiceImp implements MatchService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void delete(Long id) throws Exception{
+    public void delete(Long id) throws Exception {
         Match match = matchRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("match not exist with id :" + id));
 

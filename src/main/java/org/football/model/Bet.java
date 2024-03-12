@@ -20,15 +20,15 @@ public class Bet {
     private long id;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name="user_id", nullable=false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name="match_id", nullable=false)
+    @JoinColumn(name = "match_id", nullable = false)
     private Match match;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name="team_id", nullable=false)
+    @JoinColumn(name = "team_id", nullable = false)
     private Team team;
     private int point;
 }

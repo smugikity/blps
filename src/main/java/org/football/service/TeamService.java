@@ -1,6 +1,5 @@
 package org.football.service;
 
-import org.football.model.Match;
 import org.football.model.Team;
 
 import java.util.List;
@@ -11,7 +10,7 @@ public interface TeamService {
 
     List<Team> findAll();
 
-    Team create(String name,String stadium, String city) throws Exception;
+    Team create(String name, String stadium, String city) throws Exception;
 
     void delete(Long id) throws Exception;
 }

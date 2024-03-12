@@ -1,22 +1,15 @@
 package org.football.controller;
 
-import org.football.exception.ResourceNotFoundException;
-import org.football.model.Match;
 import org.football.dto.MatchDto;
 import org.football.dto.MatchScoreDto;
-import org.football.repository.BetRepository;
-import org.football.repository.TeamRepository;
-import org.football.repository.MatchRepository;
-import org.football.repository.UserRepository;
+import org.football.model.Match;
 import org.football.service.imp.MatchServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/")
@@ -27,7 +20,7 @@ public class MatchController {
 
     // get all teams
     @GetMapping("/matches")
-    public List<Match> getAllMatches(){
+    public List<Match> getAllMatches() {
         return matchService.findAll();
     }
 
@@ -35,7 +28,7 @@ public class MatchController {
     @PostMapping("/matches")
     public ResponseEntity<?> createMatch(@RequestBody MatchDto matchDto) {
         try {
-            Match match = matchService.create(matchDto.getName(),matchDto.getTeam1(),matchDto.getTeam2());
+            Match match = matchService.create(matchDto.getName(), matchDto.getTeam1(), matchDto.getTeam2());
             return ResponseEntity.ok(match);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -57,7 +50,7 @@ public class MatchController {
     // update team rest api
 
     @PatchMapping("/matches/{id}")
-    public ResponseEntity<?> updateMatch(@PathVariable Long id, @RequestBody MatchScoreDto matchScoreDto){
+    public ResponseEntity<?> updateMatch(@PathVariable Long id, @RequestBody MatchScoreDto matchScoreDto) {
         try {
             Match match = matchService.updateScore(id, matchScoreDto.getTeam1_score(), matchScoreDto.getTeam2_score());
             return ResponseEntity.ok(match);
@@ -68,7 +61,7 @@ public class MatchController {
 
     // delete team rest api
     @DeleteMapping("/matches/{id}")
-    public ResponseEntity<?> deleteMatch(@PathVariable Long id){
+    public ResponseEntity<?> deleteMatch(@PathVariable Long id) {
         try {
             matchService.delete(id);
             return ResponseEntity.ok("Match deleted");
