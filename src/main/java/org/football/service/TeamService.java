@@ -13,4 +13,6 @@ public interface TeamService {
     Team create(String name, String stadium, String city) throws Exception;
 
     void delete(Long id) throws Exception;
+
+    Team save(Team user) throws Exception;
 }

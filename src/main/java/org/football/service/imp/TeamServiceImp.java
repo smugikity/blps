@@ -45,5 +45,9 @@ public class TeamServiceImp implements TeamService {
         teamRepository.delete(match);
     }
 
-
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public Team save(Team team) {
+        return teamRepository.save(team);
+    }
 }

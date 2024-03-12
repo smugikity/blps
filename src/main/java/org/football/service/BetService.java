@@ -16,4 +16,6 @@ public interface BetService {
     List<Bet> findBetsByMatchAndTeam(Match match, Team team);
 
     Bet createBet(String username, Integer point, Long matchId, Long teamId) throws Exception;
+
+    Bet save(Bet user) throws Exception;
 }

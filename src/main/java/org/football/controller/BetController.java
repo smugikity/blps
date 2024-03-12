@@ -2,10 +2,11 @@ package org.football.controller;
 
 import org.football.dto.BetDto;
 import org.football.model.Bet;
-import org.football.service.imp.BetServiceImp;
+import org.football.service.BetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,19 +16,20 @@ import java.util.List;
 @RequestMapping("/api/")
 public class BetController {
     @Autowired
-    private BetServiceImp betServiceImp;
+    private BetService betService;
 
     // get all teams
     @GetMapping("/bets")
     public List<Bet> getAllBets() {
-        return betServiceImp.findAll();
+        return betService.findAll();
     }
 
     // create team rest api
     @PostMapping("/bets")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<?> createBet(@RequestBody BetDto betDto, Authentication authentication) {
         try {
-            Bet bet = betServiceImp.createBet(authentication.getPrincipal().toString(), betDto.getPoint(), betDto.getMatch(), betDto.getTeam());
+            Bet bet = betService.createBet(authentication.getPrincipal().toString(), betDto.getPoint(), betDto.getMatch(), betDto.getTeam());
             return ResponseEntity.ok(bet);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -38,37 +40,10 @@ public class BetController {
     @GetMapping("/bets/{id}")
     public ResponseEntity<?> getBetById(@PathVariable Long id) {
         try {
-            Bet bet = betServiceImp.findById(id);
+            Bet bet = betService.findById(id);
             return ResponseEntity.ok(bet);
         } catch (Exception e) {
             return new ResponseEntity<>("Bet not found", HttpStatus.BAD_REQUEST);
         }
     }
-
-    // update team rest api
-
-//    @PutMapping("/teams/{id}")
-//    public ResponseEntity<Team> updateTeam(@PathVariable Long id, @RequestBody Team teamDetails){
-//        Team team = teamRepository.findById(id)
-//                .orElseThrow(() -> new ResourceNotFoundException("team not exist with id :" + id));
-//
-//        team.setName(teamDetails.getName());
-//        team.setCity(teamDetails.getCity());
-//        team.setStadium(teamDetails.getStadium());
-//
-//        Team updatedTeam = teamRepository.save(team);
-//        return ResponseEntity.ok(updatedTeam);
-//    }
-//
-//    // delete team rest api
-//    @DeleteMapping("/teams/{id}")
-//    public ResponseEntity<Map<String, Boolean>> deleteTeam(@PathVariable Long id){
-//        Team team = teamRepository.findById(id)
-//                .orElseThrow(() -> new ResourceNotFoundException("team not exist with id :" + id));
-//
-//        teamRepository.delete(team);
-//        Map<String, Boolean> response = new HashMap<>();
-//        response.put("deleted", Boolean.TRUE);
-//        return ResponseEntity.ok(response);
-//    }
 }

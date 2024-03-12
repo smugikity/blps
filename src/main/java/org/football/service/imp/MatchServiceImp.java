@@ -81,4 +81,10 @@ public class MatchServiceImp implements MatchService {
 
         matchRepository.delete(match);
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public Match save(Match match) {
+        return matchRepository.save(match);
+    }
 }

@@ -64,4 +64,10 @@ public class BetServiceImp implements BetService {
         bet = betRepository.save(bet);
         return bet;
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public Bet save(Bet bet) {
+        return betRepository.save(bet);
+    }
 }

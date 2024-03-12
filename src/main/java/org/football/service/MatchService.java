@@ -14,4 +14,6 @@ public interface MatchService {
     Match create(String name, Long team1, Long team2) throws Exception;
 
     void delete(Long id) throws Exception;
+
+    Match save(Match user) throws Exception;
 }
